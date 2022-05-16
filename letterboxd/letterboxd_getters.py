@@ -4,11 +4,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import re
+import requests
+from bs4 import BeautifulSoup
 
-options = Options()
-options.headless = True
-driver = webdriver.Chrome(
-    "C:\Program Files (x86)\chromedriver.exe", options=options)
+
+if __name__ == '__main__':
+    options = Options()
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.headless = True
+    driver = webdriver.Chrome("C:\Program Files (x86)\chromedriver.exe")
+    driver.maximize_window()
 
 
 def get_title(soup):
@@ -17,7 +23,6 @@ def get_title(soup):
             return title.string
     except:
         return 'ERROR'
-
 
 def get_release_year(soup):
     try:

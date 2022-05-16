@@ -3,11 +3,10 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-url = "https://letterboxd.com/film/mulan/"
-soup = BeautifulSoup(requests.get(url).text, "html.parser")
 
-
-def dictionary():
+def dictionary(url):
+    soup = BeautifulSoup(requests.get(url).text, "html.parser")
+    driver.get(url)
 
     data = {
         'Title': get_title(soup),
@@ -16,13 +15,13 @@ def dictionary():
         'Members': get_number_of_members(url),
         'Banner': does_banner_exist(soup)
     }
-    driver.close()
     print("\n", json.dumps(data, indent=2), "\n")
 
-    with open("letterboxd/test.json", "w") as outfile:
-        json.dump(data, outfile)
 
-    with open('letterboxd/test.json','r+') as f:
-        dic = json.load(f)
-        dic.update(data)
-        json.dump(dic, f)
+# print("WHY IS THIS PRINTING")
+# dictionary("https://letterboxd.com/film/parasite-2019/")
+# dictionary("https://letterboxd.com/film/joker-2019/")
+# dictionary("https://letterboxd.com/film/knives-out-2019/")
+# dictionary("https://letterboxd.com/film/pulp-fiction/")
+# dictionary("https://letterboxd.com/film/fight-club/")
+# dictionary("https://letterboxd.com/film/spider-man-into-the-spider-verse/")
