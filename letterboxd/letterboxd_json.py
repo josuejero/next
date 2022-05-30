@@ -6,22 +6,15 @@ import json
 
 def dictionary(url):
     soup = BeautifulSoup(requests.get(url).text, "html.parser")
-    driver.get(url)
+
+    with open('letterboxd/movie_data.json', 'w') as f:
+        json.dump(json.loads(soup.find('script', {"type" : "application/ld+json"}).get_text().replace("/* <![CDATA[ */", "").replace("/* ]]> */","")), f)
 
     data = {
-        'Title': get_title(soup),
-        'Year': get_release_year(soup),
-        'Rating': get_rating(url),
-        'Members': get_number_of_members(url),
+        'Title': get_title(),
+        'Year': get_release_year(),
+        'Rating': get_rating(),
+        'Members': get_number_of_members(),
         'Banner': does_banner_exist(soup)
     }
     print("\n", json.dumps(data, indent=2), "\n")
-
-
-# print("WHY IS THIS PRINTING")
-# dictionary("https://letterboxd.com/film/parasite-2019/")
-# dictionary("https://letterboxd.com/film/joker-2019/")
-# dictionary("https://letterboxd.com/film/knives-out-2019/")
-# dictionary("https://letterboxd.com/film/pulp-fiction/")
-# dictionary("https://letterboxd.com/film/fight-club/")
-# dictionary("https://letterboxd.com/film/spider-man-into-the-spider-verse/")

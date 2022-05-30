@@ -1,61 +1,27 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-import re
 import requests
 from bs4 import BeautifulSoup
+import json
 
+# i have to find a way to get the soup and url from another file
 
-if __name__ == '__main__':
-    options = Options()
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.headless = True
-    driver = webdriver.Chrome("C:\Program Files (x86)\chromedriver.exe")
-    driver.maximize_window()
+def get_title():
+  with open('letterboxd/movie_data.json', 'r') as data:
+    return json.load(data)['name']
 
+def get_release_year():
+  with open('letterboxd/movie_data.json', 'r') as data:
+        return json.load(data)['releasedEvent'][0]['startDate']
 
-def get_title(soup):
-    try:
-        for title in soup.findAll('h1', {'class': 'headline-1 js-widont prettify'}):
-            return title.string
-    except:
-        return 'ERROR'
+def get_number_of_members():
+    with open('letterboxd/movie_data.json', 'r') as data:
+      return json.load(data)['aggregateRating']['ratingCount']
 
-def get_release_year(soup):
-    try:
-        for year in soup.findAll('small', attrs={'class': 'number'}):
-            return int(year.find('a').contents[0])
-    except:
-        return 'ERROR'
-
-
-def get_number_of_members(url):
-    driver.get(url)
-    while True:
-        try:
-            return int(re.sub('[^0-9,]', "", WebDriverWait(driver, 5).until(EC.visibility_of_element_located(
-                (By.XPATH, "//*[@id=\"js-poster-col\"]/section[1]/ul/li[1]/a"))).get_attribute("data-original-title")).replace(",", ""))
-        except:
-            driver.refresh()
-            continue
-
-
-def get_rating(url):
-    driver.get(url)
-    while True:
-        try:
-            return float(WebDriverWait(driver, 5).until(EC.visibility_of_element_located(
-                (By.XPATH, "//*[@id=\"film-page-wrapper\"]/div[2]/aside/section[2]/span/a"))).get_attribute("textContent"))
-        except:
-            driver.refresh()
-            continue
-
+def get_rating():
+  with open('letterboxd/movie_data.json', 'r') as data:
+      return json.load(data)['aggregateRating']['ratingValue']
 
 def does_banner_exist(soup):
-    if soup.findAll('div', attrs={'class': 'backdropmask js-backdrop-fade'}):
+  if soup.findAll('div', attrs={'class': 'backdropmask js-backdrop-fade'}):
         return True
-    else:
+  else:
         return None
