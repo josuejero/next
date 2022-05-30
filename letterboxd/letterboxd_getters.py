@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-# i have to find a way to get the soup and url from another file
-
 def get_title():
   with open('letterboxd/movie_data.json', 'r') as data:
     return json.load(data)['name']
