@@ -3,8 +3,6 @@ import requests
 from getters import *
 import json
 
-url = "https://myanimelist.net/anime/11061/Hunter_x_Hunter_2011"
-
 def new_dictionary(url):
     soup = BeautifulSoup(requests.get(url).text, "html.parser")
 
@@ -23,4 +21,6 @@ def new_dictionary(url):
     with open('my_anime_list/anime_data.json', 'w') as f:
         json.dump(data, f, indent = 2)
 
-new_dictionary(url)
+if __name__ == "__main__":
+    url = "https://myanimelist.net/anime/25777/Shingeki_no_Kyojin_Season_2"
+    new_dictionary(url)
